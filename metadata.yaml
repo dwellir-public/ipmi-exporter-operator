@@ -1,0 +1,28 @@
+name: prometheus-ipmi-exporter
+summary: >
+  Export IPMI metrics to Prometheus.
+
+maintainers:
+  - Dwellir AB <info@dwellir.com>
+
+description: >
+  Prometheus exporter for IPMI. https://github.com/prometheus-community/ipmi_exporter
+
+tags:
+  - monitoring
+  - prometheus
+  - exporter
+  - ipmi
+
+subordinate: true
+
+requires:
+  juju-info:
+    interface: juju-info
+    scope: container
+
+provides:
+  prometheus:
+    interface: prometheus
+  grafana-agent:
+    interface: cos_agent

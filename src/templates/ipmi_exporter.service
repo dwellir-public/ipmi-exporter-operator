@@ -1,0 +1,13 @@
+[Unit]
+Description=IPMI Exporter
+After=network.target
+
+[Service]
+Type=simple
+User=ipmi_exporter
+Group=ipmi_exporter
+EnvironmentFile=/etc/sysconfig/ipmi_exporter
+ExecStart=/usr/bin/ipmi_exporter $OPTIONS
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,26 @@
+# Available collectors are bmc, ipmi, chassis, dcmi, sel, and sm-lan-mode
+modules:
+  default:
+    collectors:
+      - bmc
+      - chassis
+      - dcmi
+      - ipmi
+      - sel
+    collector_cmd:
+      bmc: sudo
+      chassis: sudo
+      dcmi: sudo
+      ipmi: sudo
+      sel: sudo
+    custom_args:
+      bmc:
+        - "bmc-info"
+      chassis:
+        - "ipmi-chassis"
+      dcmi:
+        - "ipmi-dcmi"
+      ipmi:
+        - "ipmimonitoring"
+      sel:
+        - "ipmi-sel"
