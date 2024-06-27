@@ -6,13 +6,11 @@ modules:
       - chassis
       - dcmi
       - ipmi
-      - sel
     collector_cmd:
       bmc: sudo
       chassis: sudo
       dcmi: sudo
       ipmi: sudo
-      sel: sudo
     custom_args:
       bmc:
         - "bmc-info"
@@ -22,5 +20,3 @@ modules:
         - "ipmi-dcmi"
       ipmi:
         - "ipmimonitoring"
-      sel:
-        - "ipmi-sel"
