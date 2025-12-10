@@ -7,7 +7,7 @@ Deploy the `prometheus-ipmi-exporter` charm and relate it to the units you want
 to export the metrics:
 
 ```bash
-$ juju deploy prometheus-ipmi-exporter
+$ juju deploy prometheus-ipmi-exporter ipmi-exporter
 $ juju relate prometheus-ipmi-exporter tiny-bash
 ```
 
