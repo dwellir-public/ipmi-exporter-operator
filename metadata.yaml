@@ -22,6 +22,8 @@ requires:
     scope: container
 
 provides:
+  metrics-endpoint:
+    interface: prometheus_scrape
   prometheus:
     interface: prometheus
   grafana-agent:

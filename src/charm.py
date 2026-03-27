@@ -20,6 +20,7 @@ from jinja2 import Environment, FileSystemLoader
 from ops.charm import CharmBase
 from ops.main import main
 from ops.model import ActiveStatus, MaintenanceStatus
+from charms.prometheus_k8s.v0.prometheus_scrape import MetricsEndpointProvider
 
 from prometheus_ipmi_exporter import Prometheus
 
@@ -27,6 +28,9 @@ from prometheus_ipmi_exporter import Prometheus
 from charms.grafana_agent.v0.cos_agent import COSAgentProvider
 
 logger = logging.getLogger(__name__)
+
+SCRAPE_JOB_NAME = "ipmi-exporter"
+METRICS_ENDPOINT_RELATION_NAME = "metrics-endpoint"
 
 
 class IPMIExporterCharm(CharmBase):
@@ -37,6 +41,18 @@ class IPMIExporterCharm(CharmBase):
         super().__init__(*args)
 
         self.prometheus = Prometheus(self, "prometheus")
+        self.metrics_endpoint = MetricsEndpointProvider(
+            self,
+            relation_name=METRICS_ENDPOINT_RELATION_NAME,
+            jobs=[
+                {
+                    "job_name": SCRAPE_JOB_NAME,
+                    "metrics_path": "/metrics",
+                    "static_configs": [{"targets": ["*:9290"]}],
+                }
+            ],
+            forward_alert_rules=False,
+        )
 
         # Grafana Agent
         self.cos_agent_provider = COSAgentProvider(
@@ -264,4 +280,3 @@ def _render_sysconfig(context: dict) -> None:
 
 if __name__ == "__main__":
     main(IPMIExporterCharm)
-

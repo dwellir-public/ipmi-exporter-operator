@@ -24,6 +24,27 @@ The charm supports [cos-lite](https://charmhub.io/topics/canonical-observability
 $ juju relate prometheus-ipmi-exporter grafana-agent
 ```
 
+## Preferred metrics relation
+
+The preferred relation for new integrations is `metrics-endpoint` with interface
+`prometheus_scrape`.
+
+This path preserves Juju topology labels through the standard provider library
+and works directly with `alloy-vm:metrics-endpoint`. Use it when metrics will
+be forwarded onward to a remote write backend such as `mimir-vm`.
+
+```bash
+$ juju deploy prometheus-ipmi-exporter
+$ juju deploy alloy-vm --config enable-syslogreceivers=true
+$ juju integrate prometheus-ipmi-exporter:metrics-endpoint alloy-vm:metrics-endpoint
+$ juju integrate alloy-vm:send-remote-write mimir-vm:receive-remote-write
+```
+
+Compatibility note:
+
+- `prometheus` remains available for older Prometheus-specific deployments
+- `metrics-endpoint` is the preferred relation when you want Juju topology preserved end to end
+
 ## Developing
 
 We supply a `Makefile` with a target to build the charm:
@@ -58,6 +79,5 @@ Copyright &copy; Dwellir AB 2024
 Omnivector Solutions which this charm largely builds on.
 
 Also to https://github.com/pdf/zfs_exporter
-
 
 
