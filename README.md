@@ -1,6 +1,8 @@
 # IPMI Exporter
 Prometheus [IPMI Exporter](https://github.com/prometheus-community/ipmi_exporter) for IPMI metrics
 
+Supported bases: Ubuntu 22.04, 24.04, and 26.04 on amd64. Ubuntu 20.04 is no longer supported.
+
 ## Quickstart
 
 Deploy the `prometheus-ipmi-exporter` charm and relate it to the units you want
@@ -47,14 +49,29 @@ Compatibility note:
 
 ## Developing
 
-We supply a `Makefile` with a target to build the charm:
+Building requires Charmcraft 4.3 or newer and LXD. Dependencies are defined in
+`pyproject.toml` and locked in `uv.lock`. We supply a `Makefile` with a target to
+build the charm for all supported bases:
 
 ```bash
 $ make charm
 ```
 
+To build only for Ubuntu 26.04:
+
+```bash
+charmcraft pack --platform ubuntu@26.04:amd64
+```
+
+The Grafana Agent library is vendored from
+[canonical/grafana-agent-operator, library patch 28](https://github.com/canonical/grafana-agent-operator/blob/de375d4e8498cae360d1011ce76d7c0ecfc1be3b/lib/charms/grafana_agent/v0/cos_agent.py),
+which supports Pydantic 2 for Python 3.14 compatibility.
+
 ## Testing
-Run `tox -e ALL` to run unit + integration tests and verify linting.
+Run `uv tool run --with tox-uv tox -e unit` for unit tests and `make lint` for
+linting. CI runs unit tests on Python 3.10, 3.12, and 3.14, matching the supported
+Ubuntu bases. The legacy integration suite still references the node exporter
+charm and needs updating before it can validate IPMI exporter deployments.
 
 ## Contact
 

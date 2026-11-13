@@ -6,6 +6,9 @@ version
 *charm
 build
 .tox
+.venv/
+htmlcov/
+.pytest_cache/
 .build
 __pycache__/
 *.py[cod]

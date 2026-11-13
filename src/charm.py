@@ -60,7 +60,7 @@ class IPMIExporterCharm(CharmBase):
             relation_name="grafana-agent",
             metrics_endpoints=[{"port": 9290, "path": "/metrics"}],
             refresh_events=[self.on.upgrade_charm],
-            dashboard_dirs="./src/grafana_dashboards",
+            dashboard_dirs=["./src/grafana_dashboards"],
             logs_rules_dir="./src/alert_rules/loki",
             metrics_rules_dir="./src/alert_rules/prometheus"
         )
