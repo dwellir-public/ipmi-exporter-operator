@@ -6,6 +6,7 @@ import json
 import charm
 import subprocess
 import unittest
+from cosl import LZMABase64
 from ops.testing import Harness
 from unittest.mock import patch
 
@@ -70,3 +71,19 @@ class COSProxyCharmTest(unittest.TestCase):
         assert rel_data_unit["prometheus_scrape_unit_address"]
         assert rel_data_unit["prometheus_scrape_unit_name"] == charm_instance.unit.name
         assert rel_data_unit.get("prometheus_scrape_unit_path", "") == ""
+
+    def test_grafana_agent_relation_publishes_metrics_and_dashboard(self):
+        """Publish scrape and dashboard data using the Pydantic 2 library."""
+        rel_id = self.harness.add_relation("grafana-agent", "grafana-agent")
+        self.harness.add_relation_unit(rel_id, "grafana-agent/0")
+
+        rel_data = self.harness.get_relation_data(rel_id, self.harness.charm.unit.name)
+        config = json.loads(rel_data["config"])
+
+        self.assertEqual(len(config["metrics_scrape_jobs"]), 1)
+        job = config["metrics_scrape_jobs"][0]
+        self.assertEqual(job["metrics_path"], "/metrics")
+        self.assertEqual(job["static_configs"], [{"targets": ["localhost:9290"]}])
+        self.assertEqual(len(config["dashboards"]), 1)
+        dashboard = json.loads(LZMABase64.decompress(config["dashboards"][0]))
+        self.assertEqual(dashboard["title"], "IPMI Exporter")

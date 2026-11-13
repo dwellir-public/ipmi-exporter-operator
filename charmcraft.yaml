@@ -1,10 +1,12 @@
 type: charm
 platforms:
-  ubuntu@20.04:amd64:
   ubuntu@22.04:amd64:
   ubuntu@24.04:amd64:
+  ubuntu@26.04:amd64:
 
 parts:
   charm:
+    plugin: uv
+    source: .
     build-packages: [git]
-    charm-python-packages: [setuptools]
+    build-snaps: [astral-uv]
